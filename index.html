@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Happy Birthday</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+--cream: #f8f3eb;
+--cream-soft: #f2ebe0;
+--burgundy: #5a1826;
+--burgundy-dark: #3e0f19;
+--rose: #c88d97;
+--ink: #24161a;
+--muted: #695459;
+--border: rgba(90, 24, 38, 0.14);
+--shadow: 0 14px 36px rgba(36, 22, 26, 0.08);
+}
+
+* {
+box-sizing: border-box;
+margin: 0;
+padding: 0;
+}
+
+html {
+scroll-behavior: smooth;
+}
+
+body {
+background-color: var(--cream);
+color: var(--ink);
+font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+line-height: 1.65;
+padding-bottom: 96px;
+overflow-x: hidden;
+}
+
+h1, h2, h3, .serif {
+font-family: 'Cormorant Garamond', Georgia, serif;
+font-weight: 600;
+letter-spacing: -0.01em;
+}
+
+/* Password Gate */
+#lock-screen {
+position: fixed;
+inset: 0;
+z-index: 100;
+background: linear-gradient(165deg, var(--burgundy-dark) 0%, var(--burgundy) 60%, #732334 100%);
+color: var(--cream);
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 24px;
+text-align: center;
+transition: opacity 0.45s ease, visibility 0.45s ease;
+}
+
+#lock-screen.hidden {
+opacity: 0;
+visibility: hidden;
+pointer-events: none;
+}
+
+.lock-card {
+width: 100%;
+max-width: 400px;
+background: rgba(248, 243, 235, 0.08);
+border: 1px solid rgba(248, 243, 235, 0.22);
+backdrop-filter: blur(12px);
+border-radius: 24px;
+padding: 36px 26px;
+box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+}
+
+.lock-eyebrow {
+font-size: 0.75rem;
+text-transform: uppercase;
+letter-spacing: 0.18em;
+color: var(--rose);
+margin-bottom: 10px;
+font-weight: 600;
+}
+
+.lock-card h1 {
+font-size: 2.4rem;
+line-height: 1.1;
+margin-bottom: 10px;
+color: #fff;
+}
+
+.lock-card p {
+font-size: 0.92rem;
+color: rgba(248, 243, 235, 0.82);
+margin-bottom: 22px;
+}
+
+.lock-form {
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.lock-input {
+width: 100%;
+padding: 14px 16px;
+border-radius: 14px;
+border: 1px solid rgba(248, 243, 235, 0.3);
+background: rgba(255, 255, 255, 0.94);
+color: var(--ink);
+font-size: 1rem;
+text-align: center;
+outline: none;
+}
+
+.lock-input:focus {
+border-color: var(--rose);
+box-shadow: 0 0 0 3px rgba(200, 141, 151, 0.35);
+}
+
+.btn-primary {
+background: var(--cream);
+color: var(--burgundy-dark);
+border: none;
+border-radius: 14px;
+padding: 14px 20px;
+font-size: 0.95rem;
+font-weight: 600;
+cursor: pointer;
+transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.btn-primary:active {
+transform: scale(0.98);
+}
+
+.lock-error {
+min-height: 20px;
+font-size: 0.84rem;
+color: #ffd1d8;
+margin-top: 4px;
+}
+
+/* Main Page */
+#main-content {
+display: none;
+}
+
+#main-content.visible {
+display: block;
+animation: fadeUp 0.7s ease forwards;
+}
+
+@keyframes fadeUp {
+from {
+opacity: 0;
+transform: translateY(14px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.container {
+max-width: 780px;
+margin: 0 auto;
+padding: 0 20px;
+}
+
+/* Hero Section */
+.hero {
+padding: 56px 0 36px;
+text-align: center;
+}
+
+.tag {
+display: inline-block;
+font-size: 0.75rem;
+letter-spacing: 0.16em;
+text-transform: uppercase;
+color: var(--burgundy);
+background: var(--cream-soft);
+border: 1px solid var(--border);
+padding: 6px 14px;
+border-radius: 999px;
+margin-bottom: 16px;
+font-weight: 600;
+}
+
+.hero h1 {
+font-size: clamp(2.6rem, 8vw, 4.1rem);
+line-height: 1.05;
+color: var(--burgundy);
+margin-bottom: 14px;
+}
+
+.hero p.subtitle {
+max-width: 540px;
+margin: 0 auto;
+color: var(--muted);
+font-size: 1rem;
+}
+
+/* Sections */
+.section {
+padding: 40px 0;
+}
+
+.section-header {
+text-align: center;
+margin-bottom: 28px;
+}
+
+.section-header h2 {
+font-size: 2.2rem;
+color: var(--burgundy);
+margin-bottom: 6px;
+}
+
+.section-header p {
+color: var(--muted);
+font-size: 0.95rem;
+}
+
+/* Gallery Grid (9 Photos) */
+.gallery-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 18px;
+}
+
+@media (min-width: 640px) {
+.gallery-grid {
+grid-template-columns: repeat(3, 1fr);
+gap: 22px;
+}
+}
+
+.photo-card {
+background: #fff;
+border: 1px solid var(--border);
+border-radius: 18px;
+overflow: hidden;
+box-shadow: var(--shadow);
+display: flex;
+flex-direction: column;
+}
+
+.photo-card img {
+width: 100%;
+aspect-ratio: 4 / 5;
+object-fit: cover;
+display: block;
+background: var(--cream-soft);
+}
+
+.photo-caption {
+padding: 12px 14px;
+font-size: 0.86rem;
+color: var(--ink);
+text-align: center;
+font-style: italic;
+font-family: 'Cormorant Garamond', serif;
+font-size: 1.05rem;
+}
+
+/* Envelope & Letter Section */
+.envelope-box {
+background: var(--burgundy);
+color: var(--cream);
+border-radius: 24px;
+padding: 32px 24px;
+text-align: center;
+box-shadow: var(--shadow);
+}
+
+.envelope-trigger {
+display: inline-flex;
+flex-direction: column;
+align-items: center;
+gap: 10px;
+background: rgba(248, 243, 235, 0.12);
+border: 1px solid rgba(248, 243, 235, 0.28);
+color: var(--cream);
+padding: 20px 28px;
+border-radius: 18px;
+cursor: pointer;
+font-size: 1rem;
+font-weight: 500;
+margin-top: 12px;
+transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.envelope-trigger:hover {
+background: rgba(248, 243, 235, 0.18);
+}
+
+.envelope-trigger:active {
+transform: scale(0.98);
+}
+
+.envelope-icon {
+font-size: 2rem;
+line-height: 1;
+}
+
+.letter-panel {
+display: none;
+margin-top: 24px;
+background: var(--cream);
+color: var(--ink);
+border-radius: 20px;
+padding: 28px 22px;
+text-align: left;
+box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+}
+
+@media (min-width: 600px) {
+.letter-panel {
+padding: 36px 38px;
+}
+}
+
+.letter-panel.open {
+display: block;
+animation: fadeUp 0.5s ease;
+}
+
+.letter-panel h3 {
+font-size: 1.9rem;
+color: var(--burgundy);
+margin-bottom: 16px;
+}
+
+.letter-panel p {
+margin-bottom: 16px;
+font-size: 0.98rem;
+color: var(--ink);
+}
+
+.letter-signoff {
+margin-top: 22px;
+font-family: 'Cormorant Garamond', serif;
+font-style: italic;
+font-size: 1.35rem;
+color: var(--burgundy);
+}
+
+/* Floating Bottom Music Player */
+.music-bar {
+position: fixed;
+bottom: 14px;
+left: 50%;
+transform: translateX(-50%);
+width: calc(100% - 28px);
+max-width: 520px;
+background: var(--burgundy-dark);
+color: var(--cream);
+border: 1px solid rgba(248, 243, 235, 0.22);
+border-radius: 999px;
+padding: 10px 16px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+z-index: 50;
+box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.music-info {
+display: flex;
+flex-direction: column;
+min-width: 0;
+}
+
+.music-label {
+font-size: 0.68rem;
+text-transform: uppercase;
+letter-spacing: 0.12em;
+color: var(--rose);
+font-weight: 600;
+}
+
+.music-title {
+font-size: 0.88rem;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+}
+
+.music-btn {
+background: var(--cream);
+color: var(--burgundy-dark);
+border: none;
+border-radius: 999px;
+padding: 8px 16px;
+font-size: 0.82rem;
+font-weight: 600;
+cursor: pointer;
+flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+
+<!-- Password Lock Screen -->
+<div id="lock-screen">
+<div class="lock-card">
+<div class="lock-eyebrow">A Gift, Just For You</div>
+<h1>Happy Birthday</h1>
+<p>Enter the secret password to unlock your birthday keepsake.</p>
+<form class="lock-form" id="unlock-form">
+<input
+type="password"
+id="password-input"
+class="lock-input"
+placeholder="Enter password..."
+autocomplete="off"
+required
+/>
+<button type="submit" class="btn-primary">Unlock</button>
+<div class="lock-error" id="lock-error"></div>
+</form>
+</div>
+</div>
+
+<!-- Main Birthday Page -->
+<main id="main-content">
+<header class="hero container">
+<span class="tag">Birthday Edition</span>
+<h1>Happy Birthday, Sis</h1>
+<p class="subtitle">Nine moments, a special note from my heart, and a little space made just to celebrate you today.</p>
+</header>
+
+<!-- 9-Photo Gallery -->
+<section class="section container">
+<div class="section-header">
+<h2>Moments & Memories</h2>
+<p>Every frame holds a little piece of your story.</p>
+</div>
+
+<div class="gallery-grid">
+<figure class="photo-card">
+<img src="photo1.jpg" alt="Memory 1" />
+<figcaption class="photo-caption">Moment One</figcaption>
+</figure>
+<figure class="photo-card">
+<img src="photo2.jpg" alt="Memory 2" />
+<figcaption class="photo-caption">Moment Two</figcaption>
+</figure>
+<figure class="photo-card">
+<img src="photo3.jpg" alt="Memory 3" />
+<figcaption class="photo-caption">Moment Three</figcaption>
+</figure>
+<figure class="photo-card">
+<img src="photo4.jpg" alt="Memory 4" />
+<figcaption class="photo-caption">Moment Four</figcaption>
+</figure>
+<figure class="photo-card">
+<img src="photo5.jpg" alt="Memory 5" />
+<figcaption class="photo-caption">Moment Five</figcaption>
+</figure>
+<figure class="photo-card">
+<img src="photo6.jpg" alt="Memory 6" />
+<figcaption class="photo-caption">Moment Six</figcaption>
+</figure>
+<figure class="photo-card">
+<img src="photo7.jpg" alt="Memory 7" />
+<figcaption class="photo-caption">Moment Seven</figcaption>
+</figure>
+<figure class="photo-card">
+<img src="photo8.jpg" alt="Memory 8" />
+<figcaption class="photo-caption">Moment Eight</figcaption>
+</figure>
+<figure class="photo-card">
+<img src="photo9.jpg" alt="Memory 9" />
+<figcaption class="photo-caption">Moment Nine</figcaption>
+</figure>
+</div>
+</section>
+
+<!-- Interactive Letter -->
+<section class="section container">
+<div class="envelope-box">
+<div class="lock-eyebrow">Sealed With Love</div>
+<h2 class="serif" style="font-size: 2.2rem; color: #fff;">A Birthday Note For You</h2>
+<p style="color: rgba(248, 243, 235, 0.85); max-width: 440px; margin: 6px auto 0; font-size: 0.94rem;">
+Tap the envelope below whenever you're ready to read it.
+</p>
+
+<button type="button" class="envelope-trigger" id="open-letter-btn">
+<span class="envelope-icon">✉️</span>
+<span id="envelope-btn-text">Open Birthday Letter</span>
+</button>
+
+<article class="letter-panel" id="letter-panel">
+<h3>Happy Birthday</h3>
+<p>
+Happy Birthday to someone who means more to me than words can easily put on a screen. Looking at all these moments together reminds me just how much light, strength, and character you bring into the spaces around you. Growing up and sharing life with you has taught me so much—not just about family, but about resilience, warmth, and showing up even when things aren't easy.
+</p>
+<p>
+I really admire the way you carry yourself and the heart you have for the people you care about. Even when life gets busy, noisy, or unpredictable, there is something steady about you that people naturally gravitate toward. You have a way of making ordinary days feel a little brighter, whether through a random laugh, a real conversation, or simply being there when it counts.
+</p>
+<p>
+As you step into this new year, my biggest wish for you is peace of mind, genuine joy, and doors opening in ways that surprise you for the better. I hope you give yourself permission to celebrate how far you’ve come, to rest without guilt, and to chase the things that truly make you feel alive and fulfilled. May every step you take this year bring you closer to the goals and peace you’ve been working toward.
+</p>
+<p>
+No matter how much time passes or how busy life gets, you always have someone in your corner cheering for you, rooting for your wins, and wishing you nothing but the absolute best. Thank you for being you, and thank you for being my sister. Have the happiest birthday—today is all yours.
+</p>
+<div class="letter-signoff">With all my love</div>
+</article>
+</div>
+</section>
+</main>
+
+<!-- Background Music Player -->
+<audio id="bg-audio" src="song.mp3" loop preload="metadata"></audio>
+<div class="music-bar">
+<div class="music-info">
+<span class="music-label">Background Track</span>
+<span class="music-title" id="music-status">Tap Play for music</span>
+</div>
+<button type="button" class="music-btn" id="music-toggle-btn">Play</button>
+</div>
+
+<script>
+const SECRET_PASSWORD = "mirror";
+
+const lockScreen = document.getElementById("lock-screen");
+const mainContent = document.getElementById("main-content");
+const unlockForm = document.getElementById("unlock-form");
+const passwordInput = document.getElementById("password-input");
+const lockError = document.getElementById("lock-error");
+
+const audio = document.getElementById("bg-audio");
+const musicBtn = document.getElementById("music-toggle-btn");
+const musicStatus = document.getElementById("music-status");
+
+const openLetterBtn = document.getElementById("open-letter-btn");
+const envelopeBtnText = document.getElementById("envelope-btn-text");
+const letterPanel = document.getElementById("letter-panel");
+
+unlockForm.addEventListener("submit", function (e) {
+e.preventDefault();
+const entered = passwordInput.value.trim().toLowerCase();
+
+if (entered === SECRET_PASSWORD) {
+lockError.textContent = "";
+lockScreen.classList.add("hidden");
+mainContent.classList.add("visible");
+window.scrollTo({ top: 0, behavior: "instant" });
+
+// Attempt gentle playback once unlocked
+audio.play().then(() => {
+updateMusicUI(true);
+}).catch(() => {
+updateMusicUI(false);
+});
+} else {
+lockError.textContent = "That isn't quite right. Try again!";
+passwordInput.select();
+}
+});
+
+function updateMusicUI(isPlaying) {
+if (isPlaying) {
+musicBtn.textContent = "Pause";
+musicStatus.textContent = "Playing birthday song";
+} else {
+musicBtn.textContent = "Play";
+musicStatus.textContent = "Paused — tap Play";
+}
+}
+
+musicBtn.addEventListener("click", function () {
+if (audio.paused) {
+audio.play().then(() => updateMusicUI(true)).catch(() => {
+musicStatus.textContent = "Could not play song.mp3";
+});
+} else {
+audio.pause();
+updateMusicUI(false);
+}
+});
+
+audio.addEventListener("ended", () => updateMusicUI(false));
+
+openLetterBtn.addEventListener("click", function () {
+const isOpen = letterPanel.classList.toggle("open");
+envelopeBtnText.textContent = isOpen ? "Close Birthday Letter" : "Open Birthday Letter";
+if (isOpen) {
+letterPanel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+});
+</script>
+</body>
+</html>
